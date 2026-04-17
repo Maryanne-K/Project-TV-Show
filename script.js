@@ -16,6 +16,8 @@ function makePageForEpisodes(episodeList) {
     const episodeElem = document.createElement("div");
     episodeElem.className = "episode";
 
+    const imageUrl = episode.image ? episode.image.medium : "";
+
     episodeElem.innerHTML = `
       <h3>${episode.name} - ${episodeCode}</h3>
       <img src="${imageUrl}" alt="${episode.name}" />
