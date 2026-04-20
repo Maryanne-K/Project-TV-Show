@@ -13,35 +13,22 @@ function makePageForEpisodes(episodeList) {
     const number = String(episode.number).padStart(2, "0");
     const episodeCode = `S${season}E${number}`;
 
-    const article = document.createElement("article");
-    article.className = "episode";
+    const episodeElem = document.createElement("div");
+    episodeElem.className = "episode";
 
-    const img = document.createElement("img");
-    if (episode.image && episode.image.medium) {
-      img.src = episode.image.medium;
-      img.alt = episode.name;
-    } else {
-      img.alt = "No image available";
-    }
+    const imageUrl = episode.image ? episode.image.medium : "";
 
-    const h3 = document.createElement("h3");
-    h3.textContent = `${episode.name} - ${episodeCode}`;
+    episodeElem.innerHTML = `
+      <h3>${episode.name} - ${episodeCode}</h3>
+      <img src="${imageUrl}" alt="${episode.name}" />
+      <p>${episode.summary}</p>
+    `;
 
-    const meta = document.createElement("div");
-    meta.className = "meta";
-    meta.textContent = `Season ${episode.season} • Episode ${episode.number}`;
-
-    const summary = document.createElement("div");
-    summary.className = "summary";
-    summary.innerHTML = episode.summary || "";
-
-    article.appendChild(img);
-    article.appendChild(h3);
-    article.appendChild(meta);
-    article.appendChild(summary);
-
-    rootElem.appendChild(article);
+    rootElem.appendChild(episodeElem);
   });
-}
+  const credit = document.createElement("p");
+  credit.innerHTML = `Data originally from <a href="https://www.tvmaze.com/api">TVMaze API</a>`;
 
+  rootElem.appendChild(credit);
+}
 window.onload = setup;
