@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -9,22 +9,23 @@
   </head>
 
   <body>
-    <!-- Simple controls for Level 200: search, select and match count -->
-    <div id="controls" style="margin-bottom:12px">
-      <label for="search">Search episodes</label><br />
-      <input id="search" type="search" placeholder="type to filter title or summary" />
-
-      <div style="margin-top:8px; display:flex; gap:12px; align-items:center;">
+   
+    
+    
+      <div
+        style="margin-top: 8px; display: flex; gap: 12px; align-items: center"
+      >
         <label for="episode-select">Jump to</label>
         <select id="episode-select">
           <option value="">All episodes</option>
         </select>
-        <div id="match-count" style="margin-left:8px;color:#666">Showing: 0</div>
+        <div id="match-count" style="margin-left: 8px; color: #666">
+          Showing: 0
+        </div>
       </div>
     </div>
 
-    <div id="root">
-    </div>
+    <div id="root"></div>
 
     <!-- Loads a provided function called getAllEpisodes() which returns all episodes -->
     <script src="episodes.js"></script>
