@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -9,8 +9,23 @@
   </head>
 
   <body>
-    <div id="root">
+   
+    
+    
+      <div
+        style="margin-top: 8px; display: flex; gap: 12px; align-items: center"
+      >
+        <label for="episode-select">Jump to</label>
+        <select id="episode-select">
+          <option value="">All episodes</option>
+        </select>
+        <div id="match-count" style="margin-left: 8px; color: #666">
+          Showing: 0
+        </div>
+      </div>
     </div>
+
+    <div id="root"></div>
 
     <!-- Loads a provided function called getAllEpisodes() which returns all episodes -->
     <script src="episodes.js"></script>
