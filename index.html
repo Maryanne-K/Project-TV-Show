@@ -11,23 +11,25 @@
   <body>
     
       <div
-        style="margin-top: 8px; display: flex; gap: 12px; align-items: center"
-      >
+        style="margin-top: 8px; display: flex; gap: 12px; align-items: center">
+      <select id="show-selector">
+        <option value="">Select a show</option>
+      </select> 
+
       <input type="text" id="search" placeholder="Search episodes..." />
-      <label for="episode-select">Jump to</label>
-        <select id="episode-select">
+      <label for="selector">Jump to</label>
+       
+      <select id="selector">
           <option value="">All episodes</option>
         </select>
-        <div id="match-count" style="margin-left: 8px; color: #666">
+
+        <div id="count" style="margin-left: 8px; color: #666">
           Showing: 0
         </div>
       
     </div>
 
     <div id="root"></div>
-
-
-
     <!-- Loads YOUR javascript code -->
     <script src="script.js"></script>
   </body>
