@@ -102,14 +102,19 @@ function renderShowsView(showList) {
 
   renderCards(showList);
 
-  root.append(title, select, searchInput, container);
+  const credit = document.createElement("p");
+  credit.innerHTML = `
+  Data originally from <a href="https://www.tvmaze.com" target="_blank">TVMaze.com</a>
+`;
+
+  root.append(title, select, searchInput, container, credit);
 }
 
 
 function openShow(showId) {
   currentShowId = showId;
-  loadEpisodes(showId);
   renderEpisodesView();
+    loadEpisodes(showId);
 }
 
 function loadEpisodes(showId) {
@@ -137,10 +142,15 @@ function renderEpisodesView() {
 
   const backBtn = document.createElement("button");
   backBtn.textContent = "← Back to Shows";
-  backBtn.onclick = () => renderShowsView(allShows);
+  backBtn.onclick = () => {
+    currentShowId = null;
+    allEpisodes = [];
+    renderShowsView(allShows);
+  };
 
   const search = document.createElement("input");
   search.placeholder = "Search episodes...";
+  search.id = "episode-search";
   search.oninput = updateEpisodes;
 
   const select = document.createElement("select");
@@ -153,18 +163,25 @@ function renderEpisodesView() {
   const container = document.createElement("div");
   container.id = "episodes-container";
 
-  root.append(backBtn, select, search, count, container);
+  const credit = document.createElement("p");
+  credit.innerHTML = `
+  Data originally from <a href="https://www.tvmaze.com" target="_blank">TVMaze.com</a>
+`;
+
+  root.append(backBtn, select, search, count, container, credit);
 }
 
 
 function updateEpisodes() {
   const term =
-    document.querySelector("input[placeholder='Search episodes...']")
-      ?.value?.toLowerCase() || "";
+    document.getElementById("episode-search")?.value?.toLowerCase() || "";
 
   const select = document.getElementById("episode-select");
 
+  let selectedValue = "all";
   if (select) {
+    selectedValue = select.value;
+
     select.innerHTML = "";
 
     const allOpt = document.createElement("option");
@@ -178,15 +195,19 @@ function updateEpisodes() {
       opt.textContent = `S${ep.season}E${ep.number} - ${ep.name}`;
       select.appendChild(opt);
     });
+
+    
+    select.value = selectedValue;
   }
 
-  let filtered = allEpisodes.filter((ep) =>
-    ep.name.toLowerCase().includes(term) ||
-    (ep.summary || "").toLowerCase().includes(term)
+  let filtered = allEpisodes.filter(
+    (ep) =>
+      ep.name.toLowerCase().includes(term) ||
+      (ep.summary || "").toLowerCase().includes(term),
   );
 
-  if (select?.value && select.value !== "all") {
-    filtered = filtered.filter((ep) => String(ep.id) === select.value);
+  if (selectedValue !== "all") {
+    filtered = filtered.filter((ep) => String(ep.id) === selectedValue);
   }
 
   renderEpisodes(filtered);
@@ -195,6 +216,7 @@ function updateEpisodes() {
 
 function renderEpisodes(list) {
   const container = document.getElementById("episodes-container");
+  if (!container) return;
   container.innerHTML = "";
 
   list.forEach((ep) => {
