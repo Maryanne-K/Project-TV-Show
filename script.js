@@ -8,13 +8,11 @@ const cache = {
   episodesByShowId: {},
 };
 
-
 function setup() {
   loadShows();
 }
 
 window.onload = setup;
-
 
 function loadShows() {
   if (cache.shows) {
@@ -27,7 +25,7 @@ function loadShows() {
     .then((res) => res.json())
     .then((data) => {
       allShows = data.sort((a, b) =>
-        a.name.localeCompare(b.name, undefined, { sensitivity: "base" })
+        a.name.localeCompare(b.name, undefined, { sensitivity: "base" }),
       );
 
       cache.shows = allShows;
@@ -91,10 +89,11 @@ function renderShowsView(showList) {
   searchInput.addEventListener("input", () => {
     const term = searchInput.value.toLowerCase();
 
-    const filtered = allShows.filter((show) =>
-      show.name.toLowerCase().includes(term) ||
-      show.genres.join(" ").toLowerCase().includes(term) ||
-      (show.summary || "").toLowerCase().includes(term)
+    const filtered = allShows.filter(
+      (show) =>
+        show.name.toLowerCase().includes(term) ||
+        show.genres.join(" ").toLowerCase().includes(term) ||
+        (show.summary || "").toLowerCase().includes(term),
     );
 
     renderCards(filtered);
@@ -110,17 +109,33 @@ function renderShowsView(showList) {
   root.append(title, select, searchInput, container, credit);
 }
 
-
 function openShow(showId) {
   currentShowId = showId;
   renderEpisodesView();
-    loadEpisodes(showId);
+  loadEpisodes(showId);
+}
+function populateEpisodeSelector() {
+  const select = document.getElementById("episode-select");
+  if (!select) return;
+
+  select.innerHTML = "";
+
+  allEpisodes.forEach((ep) => {
+    const opt = document.createElement("option");
+    opt.value = ep.id;
+    opt.textContent = `S${String(ep.season).padStart(2, "0")}E${String(ep.number).padStart(2, "0")} - ${ep.name}`;
+
+    select.appendChild(opt);
+  });
 }
 
 function loadEpisodes(showId) {
   if (cache.episodesByShowId[showId]) {
     allEpisodes = cache.episodesByShowId[showId];
-    updateEpisodes();
+    
+    populateEpisodeSelector();
+    renderEpisodes(allEpisodes);
+    updateCount(allEpisodes.length);
     return;
   }
 
@@ -129,7 +144,10 @@ function loadEpisodes(showId) {
     .then((data) => {
       cache.episodesByShowId[showId] = data;
       allEpisodes = data;
-      updateEpisodes();
+      
+      populateEpisodeSelector();
+      renderEpisodes(allEpisodes);
+      updateCount(allEpisodes.length);
     })
     .catch(() => {
       console.error("Error loading episodes");
@@ -171,7 +189,6 @@ function renderEpisodesView() {
   root.append(backBtn, select, search, count, container, credit);
 }
 
-
 function updateEpisodes() {
   const term =
     document.getElementById("episode-search")?.value?.toLowerCase() || "";
@@ -196,7 +213,6 @@ function updateEpisodes() {
       select.appendChild(opt);
     });
 
-    
     select.value = selectedValue;
   }
 
